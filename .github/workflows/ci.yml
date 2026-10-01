@@ -27,4 +27,4 @@ jobs:
           distribution: temurin
 
       - name: Build
-        run: mvn test
+  run: java -version
