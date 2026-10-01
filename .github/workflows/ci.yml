@@ -27,4 +27,4 @@ jobs:
           distribution: temurin
 
       - name: Build
-        run: java-invalid-command
+        run: java -version
