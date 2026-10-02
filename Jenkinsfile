@@ -1,6 +1,14 @@
 pipeline {
     agent any
 
+    parameters {
+        choice(
+            name: 'ENV',
+            choices: ['dev', 'qa'],
+            description: 'Target'
+        )
+    }
+
     tools {
         maven 'Maven3'
     }
@@ -15,6 +23,13 @@ pipeline {
     }
 
     stages {
+
+        stage('Show Environment') {
+            steps {
+                echo "Selected environment: ${params.ENV}"
+            }
+        }
+
         stage('Checkout') {
             steps {
                 checkout scm
@@ -47,6 +62,15 @@ pipeline {
         stage('Publish Artifact') {
             steps {
                 archiveArtifacts artifacts: 'target/*.jar', fingerprint: true
+            }
+        }
+
+        stage('Docker Build') {
+            when {
+                branch 'main'
+            }
+            steps {
+                sh 'docker build -t devops-demo .'
             }
         }
     }
